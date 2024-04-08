@@ -12,7 +12,7 @@ function checkifLite(){
         return
         ;}
 
-  })
+  }) 
 }
 async function Pouchlite(){
   checkifLite()
