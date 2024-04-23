@@ -1,0 +1,34 @@
+<div>
+    <h1>
+        database methods
+    </h1>
+    <p>
+        there are several methods from initialised lite : useDb,createDb,removeDb,info
+    </p>
+    <pre>
+        <code class="language-js">
+            //we export default 
+
+            import pouchlite from "@pouchlabs/lite";
+
+            let lite = pouchlite().init();
+                 //or
+                lite.init()
+
+                //createDb
+                let db = lite.createDb('db name')//runs once if exists not create
+              
+                //useDb
+                let db = lite.useDb('db name') //returns db methods
+                 
+                //removedb
+                lite.removeDb('db name') // danger clears whole db and its collections
+            </code>
+    </pre>
+    <div class="fadd">ad</div>
+    <section class="pfooter">
+         <a href="/">pouchlite</a>
+         <a class="endlink" href="/collections">collections</a>
+    </section>
+
+</div> 

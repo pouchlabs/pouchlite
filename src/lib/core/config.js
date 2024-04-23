@@ -3,7 +3,7 @@ import {join} from 'node:path';
 
 // Read or create db.json
 const defaultliteconf = {
-    dbs:[{}],
+    dbs:[],
     litepath:join(process.cwd(),".pouchlite"),
 }
 

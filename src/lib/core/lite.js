@@ -1,25 +1,50 @@
 
 import {exist,createFolder } from '../utils/filesystem.js';
 import { liteconf } from './config.js';
+import db ,{createDb,removeDb} from './db.js';
+import {decode} from '@msgpack/msgpack';
 
 
-//function check if lite is in current project
-function checkifLite(){
-    console.log(liteconf.data.litepath)
-  exist(".pouchlite",(r)=>{
-    let {iserror,exists,msg,error} = r;
-    if(iserror){
-        return
-        ;}
 
-  }) 
-}
-async function Pouchlite(){
-  checkifLite()
+function Pouchlite(){
+   let lite = {};
+   lite.init = function (){
+      exist(".pouchlite",(r)=>{
+         let {iserror,exists,msg,error} = r;
+         if(iserror){
+             return
+             ;}
+          if(exists){
+           //project exists 
+           return {
+             iserror:true,
+             msg:'pouchlite exists',
+             lite:null
+           }
+          }
+          //proceed
+       //create lite folder if pass
+         
+         createFolder('.pouchlite',(r)=>{
+              if(r.iserror){
+                 return
+              }
+          
+          }) 
+     
+       })  
+    
+       return {
+         useDb:db,
+         createDb,
+         removeDb,
+         info:async function(){
+           return liteconf.data
+         }
+       }
+   }
+ 
+ return lite
 } 
-
-let lite = await Pouchlite();
-
-console.log(lite)
 
 export default Pouchlite;

@@ -1,0 +1,87 @@
+<div>
+    <h1>
+        collections methods
+    </h1>
+    <p>
+        ready for the juices!, here is where the orm and schema is 
+    </p>
+    
+    <h2>
+        create collection
+    </h2>
+    <pre>
+        <code>
+            import pouchlite from '@pouchlabs/lite';
+            import {object,string} from '@pouchlabs/lite'
+            //init
+            let db = pouchlite().init();
+            
+            //schema
+             let schema = object({
+                name:string(),
+                title:string(),
+                text:string()
+             })
+            //create collection
+            db.useDb('blog').createCollection('comments',schema);
+
+
+        </code>
+    </pre>
+    <h2>remove collection</h2>
+    <pre>
+        <code>
+            db.useDb('blog').removeColection('comments')
+            //danger removes data and the collection itself
+        </code>
+    </pre>
+    <h2>use a collection </h2>
+    <span>use() this method initializes a created collection and the orm </span>
+     <pre>
+        <code>
+          let comments =  db.useDb('users').use('comments');//returns orm methods
+
+          console.log(comments)
+
+          //put  _id will be autogen
+          //always remember your schema
+          let data = {
+            name:'pouchlite',
+            title:'how to use pouchlite',
+            text: 'its very awesome'
+          }
+
+          comments.put(data,(res)=>{
+            console.log(res)
+
+            res.iserror,
+            res.msg,
+            res.error,
+            res.doc
+
+          }) //returns created data
+
+          //for logged in user 
+          comments.getOneByuser({userid:'joe doe',id:'comment id'},(res)=>{
+            res.iserror,
+            res.msg,
+            res.error,
+            res.doc
+          })
+
+          //get many for user
+          comments.getAllByuser('user id',(res)=>{
+            res.iserror,
+            res.msg,
+            res.error,
+            res.doc
+          })
+        </code>
+     </pre>
+    <div class="fadd">ad</div>
+    <section class="pfooter">
+         <a href="/">pouchlite</a>
+         <a class="endlink" href="/collections">collections</a>
+    </section>
+
+</div> 
