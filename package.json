@@ -1,8 +1,21 @@
 {
-	"name": "@ajmlabs/lite",
+	"name": "@pouchlab/lite",
 	"version": "1.0.0",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/pouchlabs/pouchlite.git"
+	  },
+	  "bugs": {
+		"url": "https://github.com/pouchlabs/pouchlite/issues"
+	  },
+	  "author": {
+		"name": "pouchlabs"
+	  },
+	  "contributors": [
+		{"name": "pouchlabs"}
+	  ],
 	"scripts": {
-		"dev": "vite dev",
+		"docs": "docsify serve docs",
 		"build": "vite build && npm run package",
 		"preview": "vite preview",
 		"package": "svelte-kit sync && svelte-package && publint",
@@ -50,33 +63,23 @@
 		"vite": "^5.0.11",
 		"vitest": "^1.2.0"
 	},
-	"svelte": "./dist/index.js",
+	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"type": "module",
 	"dependencies": {
 		"@msgpack/msgpack": "^3.0.0-beta2",
-		"address": "^2.0.2",
 		"adm-zip": "^0.5.12",
 		"axios": "^1.6.8",
-		"bootstrap-icons": "^1.11.3",
-		"conf": "^12.0.0",
 		"deepmerge": "^4.3.1",
-		"detect-port": "^1.5.1",
 		"esm-env": "^1.0.0",
-		"eventemitter2": "^6.4.9",
 		"eventemitter3": "^5.0.1",
-		"fs-extra": "^11.2.0",
 		"get-folder-size": "^4.0.0",
-		"glob": "^10.3.12",
-		"isomorphic-ws": "^5.0.0",
-		"jsonfile": "^6.1.0",
 		"localforage": "^1.10.0",
 		"lowdb": "^7.0.1",
 		"luxon": "^3.4.4",
 		"nanoid": "^5.0.6",
-		"polka": "^0.5.2",
 		"queue": "^7.0.0",
-		"valibot": "^0.30.0",
-		"ws": "^8.16.0"
+		"valibot": "^0.30.0"
 	}
 }
+

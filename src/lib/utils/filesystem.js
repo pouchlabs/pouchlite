@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import {join,resolve} from "node:path";
+import {join} from "node:path";
 
 async function exist(file,cb){
     try{
@@ -32,11 +32,10 @@ async function createFolder(file,cb){
   if(file && cb && typeof file === "string" && typeof cb ==='function'){
 
     exist(file,(r)=>{
-     let {iserror,exists,msg,error} = r
+     let {iserror,exists,error} = r
 
        if(iserror){
-        throw error;
-        return
+       throw error;
        }
     //check if exists
       if(exists){

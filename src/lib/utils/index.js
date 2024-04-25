@@ -159,7 +159,6 @@ async function updateOne(conf,merged,data,file,cb){
   }) 
 }
 
-
 export {
     getMany,
     getSingle,

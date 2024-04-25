@@ -1,16 +1,13 @@
 import { liteconf } from "./config.js";
 import {nanoid} from 'nanoid';
 import {join} from 'node:path';
-import {rm,existsSync } from 'node:fs';
+import {rm} from 'node:fs';
 import Emitter from 'eventemitter3';
 import size  from 'get-folder-size';
 import { currentCol } from "./colection.js";
-import {object,string} from 'valibot';
 
- 
 
-import { createFolder,removeFolder } from "../utils/filesystem.js";
-import { error } from "@sveltejs/kit";
+import { createFolder} from "../utils/filesystem.js";
 
 let dbEmmitter = new Emitter()
 
@@ -99,19 +96,8 @@ async function use(db){
           size: await size.loose(opts.path)
          }
       };
-      opts.sync=async function(rdb){
-        if(db && typeof db === 'string'){
-
-        }
-      }
-      opts.change =async function(cb){
-           dbEmmitter.on('db:change',(data)=>{
-            if(cb && typeof cb === 'function'){
-              return cb(data)
-            }
-           })
-      }
-
+  
+   //
       opts.collection= {
          use:async function(cname,schema){
           if(cname && typeof cname === 'string' && schema && typeof schema === typeof {} && schema._parse){

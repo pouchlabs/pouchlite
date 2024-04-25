@@ -2,15 +2,13 @@ import {join} from 'path';
 import { JSONFilePreset } from 'lowdb/node';
 import Emmiter from 'eventemitter3';
 import {decode} from "@msgpack/msgpack";
-import { readFile} from 'fs';
+import { readFile, unlink} from 'fs';
 import { nanoid } from 'nanoid';
 import { getMany,getSingle,saveUser,saveAdm, updateOne } from '../utils/index.js';
 import merge from 'deepmerge';
 
-
-
 const colEmmiter = new Emmiter();
-
+   
 
 
 
@@ -67,12 +65,14 @@ export async function currentCol(found,opts,schema){
             if(user){
                 //save for user
                 saveUser(conf,user,newdoc,file,(res)=>{
+                  colboj.emit('change',res)
                   return cb(res)   
                 })
            
             }else{
                 //save for adm
                 saveAdm(conf,newdoc,file,(res)=>{
+                  colboj.emit('change',res)
                   return cb(res) 
                 })
                 }
@@ -124,7 +124,8 @@ export async function currentCol(found,opts,schema){
                
                let file = join(colboj.path,`${id}.lite`);
                saveUser(conf,user,newdoc,file,(res)=>{
-                 return cb(res)   
+                colboj.emit('change',res)
+                return cb(res)   
                })
              }//sche
              })
@@ -148,7 +149,8 @@ export async function currentCol(found,opts,schema){
              
              let file = join(colboj.path,`${id}.lite`);
              saveAdm(conf,newdoc,file,(res)=>{
-               return cb(res) 
+              colboj.emit('change',res)
+              return cb(res) 
              })
            }//sche
            })
@@ -323,19 +325,108 @@ export async function currentCol(found,opts,schema){
             })
       }
     }
+//remove doc
+colboj.remove= async function(id,cb){
+  if(id && typeof id === 'string' && id.length > 0 && cb && typeof cb === 'function'){
+    let conf = colboj.meta.conf;
 
+    let found = conf.data.docs.find(da => da.id === id);
 
-    colboj.change = function(cb){
-      colEmmiter.on('change',(data)=>{
-        if(data.colname != colboj.name){
-            return
-        }
-        if(cb && typeof cb ==='function'){
-            return cb(data)
-        }
+    if(found){
+      //getit
+          //all done
+          conf.data.docs = conf.data.docs.filter( da => da.id != found.id)
+          //update
+          conf.data.count = conf.data.docs.length - 1
+          
+          
+        conf.write()  
+     
+   
+      readFile(found.path,(err,data)=>{
+          if(err){
+            return cb({
+              iserror:true,
+              msg:'error occured',
+              error:err,
+            })
+
+          }
+          
+          //
+          unlink(found.path,(err)=>{
+            if(err){
+              return cb({
+                iserror:true,
+                msg:'error occured',
+                error:err
+              })
+            }//
+            //loop through attachments remove
+            let decodeddata = decode(data);
+
+            decodeddata._attachments.forEach(val=>{
+              //remove attach
+              if(val.path){
+              unlink(val.path,(err)=>{
+                if(err){
+                  return cb({
+                    iserror:true,
+                    msg:'error occured',
+                    error:err
+                  })
+                }
+             
+                return cb({
+                  iserror:false,
+                  msg:'success removed attachments',
+                
+                })
+              })
+              
+            }//end attachment
+            
+            })
+            
+          })
       })
-    } 
+      //
+      return cb({
+        iserror:false,
+        msg:'success removed doc',
+        id
+       })
+      //
+     
+    }
+  }
+}
 
+colboj.bulkRemove=async function(ids,cb){
+  if(ids && typeof ids === typeof [] && ids.length > 0 && cb && typeof cb === 'function'){
+   
+    ids.forEach(val =>{
+        if(val.id){
+          colboj.remove(val,(re)=>{
+            return cb(re)
+          }) 
+            
+
+         return
+        }else{
+
+              colboj.remove(val,(re)=>{
+                return cb(re)
+              }) 
+                
+        //
+      }
+
+    }) 
+  } 
+
+}
+ //events
     colboj.emit= function(ev,obj){
         colEmmiter.emit(ev,obj)    
     }
@@ -344,6 +435,9 @@ export async function currentCol(found,opts,schema){
             return cb(data)
         })
     }
+  
+//todo add attachments methods
+
 
  return colboj
 }

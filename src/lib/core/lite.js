@@ -2,15 +2,13 @@
 import {exist,createFolder } from '../utils/filesystem.js';
 import { liteconf } from './config.js';
 import db ,{createDb,removeDb} from './db.js';
-import {decode} from '@msgpack/msgpack';
-
 
 
 function Pouchlite(){
    let lite = {};
    lite.init = function (){
       exist(".pouchlite",(r)=>{
-         let {iserror,exists,msg,error} = r;
+         let {iserror,exists} = r;
          if(iserror){
              return
              ;}
