@@ -19,7 +19,7 @@
 	"scripts": {
 		"docs": "node --watch server.js",
 		"start":"node server.js",
-		"build": "vite build && npm run package",
+		"build": "vite build && npm run package && npm run docs",
 		"preview": "vite preview",
 		"package": "svelte-kit sync && svelte-package && publint",
 		"prepublishOnly": "npm run package",
