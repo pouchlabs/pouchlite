@@ -7,14 +7,7 @@
     </p>
     <pre>
         <code class="language-js">
-            //we export default 
-
-            import pouchlite from "@pouchlabs/lite";
-
-            let lite = pouchlite().init();
-                 //or
-                lite.init()
-
+            
                 //createDb
                 let db = lite.createDb('db name')//runs once if exists not create
               
@@ -23,9 +16,12 @@
                  
                 //removedb
                 lite.removeDb('db name') // danger clears whole db and its collections
+               
+                //info
+                lite.info()
             </code>
     </pre>
-    <div class="fadd">ad</div>
+    <div hidden="true" class="fadd">ad</div>
     <section class="pfooter">
          <a href="/">pouchlite</a>
          <a class="endlink" href="/collections">collections</a>
