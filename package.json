@@ -85,5 +85,6 @@
 		"nanoid": "^5.0.6",
 		"queue": "^7.0.0",
 		"valibot": "^0.30.0"
-	}
+	},
+	"keywords":["sync","db","database","orm","offline-first","embeddable","ultra fast","nodejs"]
 }
