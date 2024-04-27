@@ -23,10 +23,11 @@ pouchlite draws inspiration from several tools:
 [sqlite](https://www.sqlite.org/index.html)
 
 
-# support
+# support 
 
-support the developement of pouchlite,
+support the development of pouchlite,
 [donate](https://ko-fi.com/pouchlabs)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/H2H3XBF9G) 
 
 
 
