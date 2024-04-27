@@ -10,6 +10,16 @@ implement attachments api
 impliment sync 
 impliment client
 impliment browser api
+```bash
+ npm install --save @pouchlab/lite
+```
+```js
+import pouchlite from '@pouchlab/lite";
+let lite = pouchlite().init();
+//or
+lite.init() //later
+
+```
 
 Read more about it  [in the docs](https://pouchlite.vercel.app).
 
