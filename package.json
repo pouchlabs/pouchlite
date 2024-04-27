@@ -17,8 +17,7 @@
 		}
 	],
 	"scripts": {
-		"dev": "node --watch server.js",
-		"start": "node server.js",
+		"dev": "vite dev",
 		"build": "vite build && npm run package",
 		"preview": "node server.js",
 		"package": "svelte-kit sync && svelte-package && publint",
@@ -43,9 +42,6 @@
 		"!dist/**/*.test.*",
 		"!dist/**/*.spec.*"
 	],
-	"peerDependencies": {
-		"svelte": "^4.0.0"
-	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
 		"@sveltejs/adapter-auto": "^3.0.0",
