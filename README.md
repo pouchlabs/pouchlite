@@ -10,6 +10,16 @@ implement attachments api
 impliment sync 
 impliment client
 impliment browser api
+```bash
+ npm install --save @pouchlab/lite
+```
+```js
+import pouchlite from '@pouchlab/lite";
+let lite = pouchlite().init();
+//or
+lite.init() //later
+
+```
 
 Read more about it  [in the docs](https://pouchlite.vercel.app).
 
@@ -23,10 +33,11 @@ pouchlite draws inspiration from several tools:
 [sqlite](https://www.sqlite.org/index.html)
 
 
-# support
+# support 
 
-support the developement of pouchlite,
+support the development of pouchlite,
 [donate](https://ko-fi.com/pouchlabs)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/H2H3XBF9G) 
 
 
 
