@@ -2,8 +2,7 @@ import Pouchlite  from "./core/lite.js";
  
 
 
-export {
-  Pouchlite
-}
+export default Pouchlite
+
 
 

@@ -34,7 +34,7 @@
 	"exports": {
 		".": {
 			"types": "./dist/index.d.ts",
-			"main": "./dist/index.js"
+			"import": "./dist/index.js"
 		}
 	},
 	"files": [
@@ -71,6 +71,9 @@
 	"main": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"type": "module",
+	"peerDependencies": {
+	   "valibot": "^0.30.0"
+	},
 	"dependencies": {
 		"@msgpack/msgpack": "^3.0.0-beta2",
 		"adm-zip": "^0.5.12",

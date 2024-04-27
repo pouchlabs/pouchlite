@@ -1,4 +1,4 @@
-import { Pouchlite } from "./index.js";
+import  Pouchlite  from "./index.js";
 import { object ,string} from "valibot";
 
 
@@ -10,7 +10,7 @@ let schema = object({name:string()})
 
 let users = await  db.collection.use('posts',schema)    
 
-let da ={names:'maanto0bbud'} 
+let da ={names:'0bbud'} 
 
 users.update({id:'YQJdh5OFxjA0PhgxCbknz',data:da},(res)=>{
     console.log(res) 
