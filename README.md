@@ -1,6 +1,9 @@
 # pouchlite
 
+![alt text](https://pouchlite.vercel.app/img/_media/plogo.svg)
+
 A very simple but yet fast json and files storage engine that's embeddable,syncs  [`pouchlite`](https://github.com/pouchlabs/pouchlite).
+alternative to sqlite 
 
 # news
 project is still in early developement, stability untill version 2
