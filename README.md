@@ -39,5 +39,8 @@ support the development of pouchlite,
 [donate](https://ko-fi.com/pouchlabs)
 [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/H2H3XBF9G) 
 
-
+# stargazers
+[![Stargazers repo roster for @pouchlabs/pouchlite](https://reporoster.com/stars/pouchlabs/pouchlite)](https://github.com/pouchlabs/pouchlite/stargazers)
+# forkers
+[![Forkers repo roster for @pouchlabs/pouchlite](https://reporoster.com/forks/pouchlabs/pouchlite)](https://github.com/pouchlabs/pouchlite/network/members)
 
