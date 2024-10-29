@@ -1,0 +1,54 @@
+{
+  "name": "lite",
+  "version": "1.0.0",
+  "description": "blazingly fast pure js storage engine",
+  "workspaces": [
+    "packages/*",
+     "apps/*"
+  ],
+  "scripts": {
+    "build": "npm run build:package-a && npm run build:package-b",
+    "build:package-a": "cd packages/package-a && npm run build",
+    "build:package-b": "cd packages/package-b && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pouchlabs/lite.git"
+  },
+  "keywords": [
+    "db",
+    "storage",
+    "offline-first",
+    "browser",
+    "nodejs",
+    "sync",
+    "orm",
+    "json",
+    "files",
+    "database",
+    "nosql",
+    "embeddable"
+  ],
+  "author": "pouchlabs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pouchlabs/lite/issues"
+  },
+  "homepage": "https://lite.pouchlabs.xyz",
+  "dependencies": {
+    "@msgpack/msgpack": "^3.0.0-beta2",
+    "adm-zip": "^0.5.14",
+    "axios": "^1.7.2",
+    "chokidar": "^3.6.0",
+    "deepmerge": "^4.3.1",
+    "esm-env": "^1.0.0",
+    "eventemitter3": "^5.0.1",
+    "get-folder-size": "^4.0.0",
+    "localforage": "^1.10.0",
+    "lowdb": "^7.0.1",
+    "luxon": "^3.4.4",
+    "nanoid": "^5.0.7",
+    "queue": "^7.0.0",
+    "zod": "^3.23.8"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "name": "@pouchlab/lite-browser",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "build": "rsbuild build",
+    "build:lib": "modern build",
+    "check": "biome check --write",
+    "dev": "rsbuild dev --open",
+    "format": "prettier --write .",
+    "lint": "eslint .",
+    "preview": "rsbuild preview"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@biomejs/biome": "^1.8.3",
+    "@eslint/js": "^9.6.0",
+    "@modern-js/module-tools": "^2.55.0",
+    "@rsbuild/core": "1.0.1-beta.0",
+    "eslint": "^9.6.0",
+    "globals": "^15.8.0",
+    "prettier": "^3.3.2"
+  },
+  "dependencies": {
+    "@msgpack/msgpack": "^3.0.0-beta2",
+    "@pouchlab/realtor": "^1.0.1",
+    "adm-zip": "^0.5.14",
+    "axios": "^1.7.2",
+    "deepmerge": "^4.3.1",
+    "esm-env": "^1.0.0",
+    "eventemitter3": "^5.0.1",
+    "get-folder-size": "^4.0.0",
+    "localforage": "^1.10.0",
+    "lowdb": "^7.0.1",
+    "luxon": "^3.4.4",
+    "nanoid": "^5.0.7",
+    "queue": "^7.0.0",
+    "zod": "^3.23.8"
+  }
+}

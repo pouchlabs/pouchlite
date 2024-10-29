@@ -1,0 +1,41 @@
+[
+  {
+    "text": "Home",
+    "link": "/",
+    "activeMatch": "/"
+  },
+  {
+    "text": "Guide",
+    "link": "/guide/",
+    "activeMatch": "/guide/"
+  },
+  {
+    "text": "lite-node",
+    "link": "/node/",
+    "activeMatch": "/node/"
+  },
+  {
+    "text": "lite-browser",
+    "link": "/browser/",
+    "activeMatch": "/browser/"
+  },
+  {
+    "text": "liteq",
+    "link": "/liteq/",
+    "activeMatch": "/liteq/"
+  },
+  {
+    "text": "lite-server",
+    "link": "/server/",
+    "activeMatch": "/server/"
+  },
+  {
+    "text": "support",
+    "link": "/support/",
+    "activeMatch": "/support/"
+  },
+  {
+    "text": "products",
+    "link": "https://products.pouchlabs.xyz"
+  }
+]
