@@ -18,4 +18,6 @@ a mighty small  backend storage engine thats fast takes the smallest size to sto
 you can find it as
  `@pouchlab/liteq`
  ## lite-server
- a self-hosted paid backend realtime server thats super fast syncs data accross pouchlite instances either lite-node or lite-browser,made with [fasteejs](https://fasteejs.top) and [realtorjs](https://realtorjs.top) all creation of [ajm](https://devfolio.top/ajm) founder pouchlabs
+ coming soon..
+ a self-hosted  backend realtime server thats super fast syncs data accross pouchlite instances either lite-node or lite-browser,made with [fasteejs](https://fasteejs.top) and realtorjs all creation of [ajm](https://x.com/ajm_ke) founder pouchlabs
+

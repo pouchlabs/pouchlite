@@ -1,14 +1,24 @@
 import Pouchlite from "./lite.js";
-import z from "zod"
-let lite = new Pouchlite()//.init();
- let users = lite.useDb("users")
+import { z } from "zod";
 
- let posts = users.use("posts");
-posts.sync("ws://localhost:7090") 
-//console.log(await posts.getMany(["hi2","hi"]))   
-console.log(await posts.put({id:"hi5",data:{users:{name:"antonymt",age:20},isadm:true}}) )
-   
+// creating a schema for strings
+const mySchema = z.object({
+  name:z.string(),
+  age:z.number()
+});
 
+
+const lite = new Pouchlite({path:"./"}) 
+  //provide valid path to file or leave blank for default
+ const usersdb = lite.useDb("users") //dbname
+ const posts = usersdb.use("posts");  
+console.log(lite)
+ //posts.defineSchema(mySchema)  
+
+//usersdb.removeCollection("posts")  
+//todo remove function
+
+export default Pouchlite;
 export { 
     Pouchlite
 }

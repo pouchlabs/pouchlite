@@ -5,7 +5,7 @@ let users = Pouchlite("userstestklghkb");
 let messages = users.use("messages");
 
 messages.change()
-
+console.log(messages)
 
 
 document.querySelector('#root').innerHTML = `

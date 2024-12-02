@@ -1,5 +1,7 @@
 # usage
-how to use lite-browser,is a browser only storage engine
+how to use lite-browser,is a browser only storage engine,
+
+
 ```js
  import {Pouchlite} from "@pouchlab/lite-browser";
 ```

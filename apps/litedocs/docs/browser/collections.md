@@ -40,9 +40,5 @@ a change listener for the collection
  })
 ```
 ## sync
-sync logic is powered by lite-server
-
-```js
- comments.sync("wss://localhost:3000") //valid lite-server url
-```
+coming soon...
 

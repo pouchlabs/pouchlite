@@ -3,7 +3,6 @@ all collections methods are :
 * use - uses already initialised collection or creates a new one if not exist.
 * removeCollection - removes completely the collection plus its documents
 * info - returns collection information
-* sync - all sync logic
 * change - change listener for the collection
 
 ## create collection and use
@@ -18,14 +17,20 @@ let commentSchema = z.object({
     author:z.string()
 })
 
- let comments = usersdb.use("comments",commentSchema) //returns the orm here
+ let comments = usersdb.use("comments") //returns the orm here
  console.log(comments)
 ```
 ## remove a collection
 danger,its removes a collection completely from the db
 
 ```js
- usersdb.removeCollection("comments")
+ console.log(usersdb.removeCollection("comments"))
+ //returns 
+ {
+    iserror:false,
+    msg:"success",
+     col:col_name
+}
 ```
 ## info
 returns collection information
@@ -40,10 +45,3 @@ a change listener for the collection
     console.log(data)
  })
 ```
-## sync
-sync logic is powered by lite-server
-
-```js
- comments.sync("wss://localhost:3000") //valid lite-server url
-```
-

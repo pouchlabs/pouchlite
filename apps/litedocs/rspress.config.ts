@@ -14,11 +14,12 @@ export default defineConfig({
     
     socialLinks: [
       { icon: 'github', mode: 'link', content: 'https://github.com/pouchlabs/lite' },
+      { icon: 'x', mode: 'link', content: 'https://x.com/pouchlab' }
     ],
     outlineTitle: 'Outline',
     footer: {
       message:
-        '<p>made with love by  <strong><a href="https://github.com/pouchlabs">pouchlabs</a></strong> and founder <strong><a href="https://devfolio.top/ajm">ajm</a></strong></p>',
+        '<p>made with love by  <strong><a href="https://github.com/pouchlabs">pouchlabs</a></strong> and founder <strong><a href="https://x.com/ajm_ke">ajm</a></strong></p>',
     },
 
   

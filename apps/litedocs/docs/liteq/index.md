@@ -7,25 +7,42 @@ how to use liteq,is a backend only storage engine
 ```js
  import {Liteq} from "@pouchlab/liteq";
 ```
-## inspiration
-draws inspiration from lowdb
+
 ## init
 initialize new instance
 ```js
-  const usersdb = liteq({dpath:"/tmp",dbname:"users"}) //pass valid folder path and db name
-  console.log(usersdb)
+  const usersdb = new Liteq({dpath:"/tmp",dbname:"users"}) //pass valid folder path and db name
+  console.log(usersdb) //see all exposed methods
 ```
-## manipulate data
-returns {
-  data,
-  write,
-  read
-}
+methods:
+* get - gets data / returns promise
+* set - sets data
+* remove - removes data
+* change - listen for changes
+* clear - clear all data 
 
 ```js
- console.log(usersdb.data)
- usersdb.data.users.push({name:"john",is_adm:true,created_at:Date.now(),age:40})
- console.log(usersdb.data)
- //save to file system
- usersdb.write()
+//get
+await usersdb.get("id") 
+
+//set
+await usersdb.set("hu",{msg:"hi"}) //id and object required and optional ttl
+
+//remove
+await usersdb.remove("hu")
+//change
+usersdb.change((data)=>{ //listen for changes
+   console.log(data)
+})
+//clear
+usersdb.clear((res)=>{
+  console.log(res)
+})
+
+//helpers
+
+usersdb.helpers.encrypt("hi") //requires text
+usersdb.helpers.decrypt("aaajkkfhjkf") //requires encrypted text
+usersdb.helpers.genUuid(18) //requires optional number length
+
 ```

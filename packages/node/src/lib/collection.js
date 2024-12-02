@@ -1,21 +1,27 @@
 import {join} from "path";
-import { genUuid,createFolder,checktype,bytesForHuman,removeListDuplicate } from "./utils.js";
+import { genUuid,checktype,removeListDuplicate } from "./utils.js";
 import { Liteq } from "@pouchlab/liteq";
 import Event from "eventemitter3";
 import deepmerge from "deepmerge";
 import fs from "fs"
-import z from "zod"
-import { CreateClient } from "@pouchlab/realtor";
-
 const Emmitter = new Event();
 
 function verifySchema(schema,data){
    let valid = schema.safeParse(data);
-   console.log(valid)
-}
-//remove
-function removeDocument(data){
- console.log(data)
+
+   if(valid.success === true){
+     return{
+      iserror:false,
+      data:valid.data,
+      error:null
+     }
+   }
+   return{
+    iserror: true,
+    data:null,
+    error:valid.error
+   }
+
 }
 class Collection{
     #config
@@ -23,37 +29,43 @@ class Collection{
     #schema
     #indexes
     #dbconf
+    #db
     constructor(meta,db){
-    if(!fs.existsSync(meta.path)){
-      fs.mkdirSync(meta.path,true)
-    }
+  
        this.#config = new Liteq({dpath:meta.path,dbname:"meta"})
        this.#schema = null;
        this.#meta = meta;
        this.#indexes = [];
-       this.#dbconf=db
-       this.#config.onRemoved((data)=>{
-         removeDocument(data)
-       })
+       this.#dbconf=db;
+       this.#db = new Liteq({dpath:this.#meta.path,dbname:this.#meta.name})
+       this.helpers=this.#db.helpers
     }
     get meta(){
         return this.#meta = deepmerge(this.#meta,{docs:this.#config.getKeys().keys,count:
             this.#config.getKeys().count
         });
     }
-    get indexes(){
-        return this.#indexes;
-    }
 
-   async put(opts={id:"",data:{}}){
+   async put(opts={id:genUuid(16),data:{name:"j",age:2}}){
         if(!opts || checktype(opts) !== checktype({}) ){
             throw new Error("pouchlite: opts must be valid json object")
           }
       if(opts.id && typeof opts.id !== "string" &&  opts.id.length === 0 && checktype(opts.data) !== checktype({})){
          throw new Error("pouchlite: put requires valid data object and optional id string or ttl")
       }
+      //verify schema
+      if(this.#schema){
+       let {error,iserror,data} =  verifySchema(this.#schema,opts.data)
+       if(iserror === false){
+        opts.data =data;
+        
+       }else{
+          console.log("pouchlite: invalid data passed,check data against schema \n",error)
+          return
+       }
+      }
       let id = opts.id;
-      let data = opts.data || {};
+      let data = opts.data;
       let db = new Liteq({dpath:this.#meta.path,dbname:this.#meta.name})
       let found = await this.#config.get(id);
       if(!found){
@@ -87,18 +99,31 @@ class Collection{
        
       })
     }
+
     putMany(opts=[{id:"",data:{}}]){
        if(opts && checktype(opts) !== checktype([{}]) || opts.length=== 0 || opts.length > 30){
         throw new Error("pouchlite: putMany requires valid array of objects,limit 30")
        }
+       
       let success = false;
        opts.forEach(async (doc)=>{
-        if(doc.id && typeof doc.id === "string" && doc.id.length > 0){
+        if(doc.id && typeof doc.id === "string" && doc.id.length > 0 && checktype(doc.data) === checktype({})){
+            //verify schema
+      if(this.#schema){
+        let {error,iserror,data} =  verifySchema(this.#schema,doc.data)
+        if(iserror === false){
+         doc.data =data;
+         
+        }else{
+           console.log("pouchlite: invalid data passed,check data against schema \n",error)
+           return
+        }
+       }
             this.put({id:doc.id,data:doc.data})   
            success = true
         }else{
             success = false
-            throw new Error("pouchlite: opts.id should be a string not empty,data should be object")
+            throw new Error("pouchlite: requires valid array of objects, id be a string not empty,data should be object")
         }
 
        })
@@ -108,6 +133,7 @@ class Collection{
           })
        }
     }
+
   async get(id=""){
     if(typeof id !== "string" || id.length === 0){
       throw new Error("pouchlite: get requires id string")
@@ -127,6 +153,7 @@ class Collection{
     })
 
   }
+
   getMany(ids=[""]){
         if(ids && checktype(ids) !== checktype([""]) || ids.length === 0 || ids.length > 30 ){
           throw new Error("pouchlite: getMany requires valid array of string id,limit 30")
@@ -149,129 +176,106 @@ class Collection{
                   resolve({msg:"success",doc:docs})
                  },9)
                 
-              
              })
           })
          
         }
   }
-
+  remove(id=""){
+    if(typeof id !== "string" || id.length === 0){
+      throw new Error("pouchlite: remove requires id string")
+    }
+    return new Promise((resolve)=>{
+      let db = new Liteq({dpath:this.#meta.path,dbname:this.#meta.name})
+      let keys = this.#config.getKeys().keys;
+      let found = keys.find((k)=> k === id)
+      if(found){ 
+            db.remove(found).then(d=>{
+              resolve({msg:"success",doc:d})
+            })
+          
+        return 
+      }
+      resolve({msg:"not found",doc:null})
+    })
+    }
+    getKeys(){
+        let db = new Liteq({dpath:this.#meta.path,dbname:this.#meta.name})
+        return db.getKeys();
+    }
+    getSize(cb=()=>{}){
+      if(cb && typeof cb === "function"){
+        let db = new Liteq({dpath:this.#meta.path,dbname:this.#meta.name})
+           db.getSize(cb)
+        }else{
+         throw new Error("pouchlite: cb function required")
+        }
+  }
   change(cb){
     if(cb && typeof cb === "function"){
       let db = new Liteq({dpath:this.#meta.path,dbname:this.#meta.name})
-        Emmitter.on("change_",(data)=>{
+      db.change((data)=>{
           cb(data)
-        })
+      })
+        // Emmitter.on("change_",(data)=>{
+        //   cb(data)
+        // })
       }else{
        throw new Error("pouchlite: cb function required")
       }
-}
-async sync(url=""){
-  if(typeof url !== "string" || url.length === 0){
-    throw new Error("pouchlite: sync requires lite-server url string")
-  }
-  let validurl = z.string().url().safeParse(url);
-  if(validurl.success){
-   let  uri = validurl.data
-   let client = CreateClient(uri); 
-   client.onConnected(()=>{ 
-    //initials
-    client.emit("from_client_user",{user:client.id,db:this.#dbconf.name},(res)=>{
-     // console.log(res,"res") 
-     })
-     let keys = this.#config.getKeys().keys;
-     let db = new Liteq({dpath:this.#meta.path,dbname:this.#meta.name})
-     keys.forEach(async k=>{
-        let doc = await db.get(k)
-        client.emit("full_sync_client",{id:doc._id,db:this.#dbconf.name,collection:this.#meta.name,document:doc},(res)=>{
+    }
 
-        }) 
-     })
-
-   
-   })
-   //change emit
-   function syncChange(data){
-    console.log(data,"dg")
-    client.emit("client_change",data,(res)=>{ 
-     console.log(res) 
-    })
-   }
-this.change(syncChange) 
-
-          //change
-          client.on("server_change",(data)=>{ 
-            console.log("server change")
-         })
-         client.on("me",async(data)=>{ 
-          //console.log(data)
-          if(data.data.doc){
-            let db = new Liteq({dpath:this.#meta.path,dbname:this.#meta.name})
-            let d = await db.get(data.data.doc._id);
-            if(d && d.msg === "success"){
-              if(d.doc.updated_at === data.data.doc.updated_at){
-                console.log("is there") 
-              }
-            }
-          }
-       })
-
-    return
-  }
-  throw new Error("pouchlite: sync requires lite-server url string")
-
-}
     defineSchema(schema){
-       if(!schema || !schema._parse){
-        throw new Error("pouchlite: valid zod schema required")
-       }
+       if(!schema || !schema._parse || schema._def.typeName !== 'ZodObject' ){ 
+        throw new Error("pouchlite: valid zod object schema required")
+       } 
        this.#schema = schema
     }
-    index={
-      set:(name="",obj={entry:"",value:""})=>{
-         if(!name || typeof name !== "string" || name.length === 0 || checktype(obj) !== checktype({}) || !obj.entry || typeof obj.entry !== "string" || obj.entry.length === 0 || !obj.value || typeof obj.value !== "string" || obj.value.length === 0){
-            throw new Error("pouchlite: index set requires valid index name and obj");
-         }
-         let found = this.#indexes.find((i)=> i.name === name);
-         if(!found){
-            let newindex = {
-                name,
-                entry:obj.entry,
-                value:obj.value,
-                docs:[],
-                count:0
-             }
-             this.#indexes.push(newindex)
-             return "success"
-         }
-         return "exists"
-
-      },
-      delete:(name="")=>{
-        if(name && typeof name === "string" && !name.length===0){
-           let filtered = this.#indexes.filter((i)=>i.name !== name);
-           if(filtered){
-            this.#indexes=filtered;
-            return "success"
-           }
-           return "not found"
-        }
-      },
-      clear:()=>{
-        this.#indexes=[]
-        return "success"
-      }
-    }
+  
+    //todo:indexing
+    // index={
+    //   set:(name="",obj={entry:"",value:""})=>{
+    //      if(!name || typeof name !== "string" || name.length === 0 || checktype(obj) !== checktype({}) || !obj.entry || typeof obj.entry !== "string" || obj.entry.length === 0 || !obj.value || typeof obj.value !== "string" || obj.value.length === 0){
+    //         throw new Error("pouchlite: index set requires valid index name and obj");
+    //      }
+    //      let found = this.#indexes.find((i)=> i.name === name);
+    //      if(!found){
+    //         let newindex = {
+    //             name,
+    //             entry:obj.entry,
+    //             value:obj.value,
+    //             docs:[],
+    //             count:0
+    //          }
+    //          this.#indexes.push(newindex)
+    //          return "success"
+    //      }
+    //      return "exists"
+    //   },
+    //   delete:(name="")=>{
+    //     if(name && typeof name === "string" && !name.length===0){
+    //        let filtered = this.#indexes.filter((i)=>i.name !== name);
+    //        if(filtered){
+    //         this.#indexes=filtered;
+    //         return "success"
+    //        }
+    //        return "not found"
+    //     }
+    //   },
+    //   clear:()=>{
+    //     this.#indexes=[]
+    //     return "success"
+    //   }
+    // }
 }
 
 export function  currentCol(name,meta,config){
     let dbconf = JSON.parse(JSON.stringify(meta));
-
    let found = dbconf.cols.find((col)=> col.name === name);
    if(found){
     //use
     return new Collection(found,dbconf)
-   }
+   }else{
    //create new
    let colpath = join(dbconf.path,name)
    let newcol = {
@@ -283,11 +287,14 @@ export function  currentCol(name,meta,config){
     created_at:Date.now()
    }
    dbconf.cols.push(newcol)
-   dbconf.cols_count = dbconf.cols_count+1;
-    createFolder(colpath,(res)=>{
-       if(res === "success"){
-        config.set(dbconf.name,dbconf) 
-       }
-    })
-   return new Collection(newcol,dbconf)
+   dbconf.cols_count = dbconf.cols_count++;
+    config.set(dbconf.name,dbconf).then(_=>
+    {
+      if(!fs.existsSync(meta.path)){
+        fs.mkdirSync(meta.path,true)
+      } 
+   }) 
+   
+   return new Collection(newcol,dbconf)  
+  }
 }

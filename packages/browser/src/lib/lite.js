@@ -7,9 +7,6 @@ import {checktype} from "./utils.js";
 import {put_single,update_single} from "./put.js";
 import {get_single,get_many} from "./get.js";
 import { remove_many,remove_single } from "./remove.js";
-import { promise } from "zod";
-
-
 
 
 function create_Collection_use(cname,config,dbname){

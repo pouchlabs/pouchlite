@@ -1,7 +1,7 @@
 # orm
 interact with documents the right way quick and fast,
 query your data like a boss 😑.
-always remember what is your schema coz non gets inside without passing the schema for validation
+always remember what is your schema coz non gets inside without passing the schema for validation,but schema is optional
 
 all orm methods are :
 * put - creates a single document to the collection
@@ -10,8 +10,8 @@ all orm methods are :
 * getMany - gets Many documents in one batch limit 30
 * update - updates a single document
 * updateMany - updates Many documets in batch limit 30
-* getAttachments - gets document attachments
-* putAttachments - puts document attachments
+* defineSchema - method to define collection schema
+* change - collection changes
 
 
 ## put
@@ -53,15 +53,15 @@ comments.update({id:"com1",data:{body:"updated body comment"}})
 comments.updateMany([{id:"com2",data:{body:"updated body comment"}},{id:"com1",data:{body:"updated body2 comment"}}]) //30 limit
 ```
 ## attachments
-gets and puts document attachments
+coming soon...
+
+## change
+collection changes
 ```js
-//get attachments for document
+ comments.change((data)=>{
+    console.log(data)
+ })
 
- comments.getAttachments({id:"com1",attachmentid:"hhhhhg_jj"})
-
- //put attachments
- comments.putAttachments({id:"com1",attachment:"http://www.example.com/path/to/lenna.jpg",type:})
- //attachment can either be buffer, image url,base64-encoded format, or as a Blob.
 ```
 
 

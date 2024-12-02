@@ -1,8 +1,9 @@
 import fs from "fs";
 import { parse,join } from "path";
-import { checktype,createFolder,genUuid } from "./utils.js";
+import { checktype} from "./utils.js";
 import {Liteq} from "@pouchlab/liteq";
-import { currentDb } from "./db.js";
+import { Db } from "./db.js";
+
 async function verify(path){
     if(path === undefined || typeof path !== "string" || path.length === 0){
       throw new Error("pouchlite: path must be valid folder path");
@@ -33,43 +34,68 @@ export default class Pouchlite{
             throw new Error("pouchlite: requires valid opts object")
        verify(opts.path) 
        this.#path = opts.path
+   
        this.#litepath = join(this.#path,".pouchlite")
        this.#k = this.#litepath.slice(0,11)+"_pouchliteversion_one"
        this.#config = new Liteq({dpath: join(this.#path,".pouchlite"),dbname:"lite-config"})   
-    } 
+       this.paths={passedpath:this.#path,litepath:this.#litepath}
+      } 
     get path(){  
         return {path:this.#path,litepath:this.#litepath}
     }
     //methods
     useDb(db=""){ 
-    
        if(!db || typeof db !== "string" || db.length ===0){
         throw new Error("pouchlite: db required at useDb,not none string or empty")
        } 
        //check db
-       let found = null
-       this.#config.get(db).then(d=>{
-        found=d
-       })
-       if(found){
-          return currentDb(found,this.#config)
-       }
-       //create new db
-       let newdb = {
-        id:genUuid(),
-        name:db,
-        path:join(this.#litepath,db),
-        cols:[],
-        cols_count:0,
-        created_at:Date.now(),
-       }
-       if(!fs.existsSync(newdb.path)){
-        this.#config.set(db,newdb)
-        fs.mkdirSync(newdb.path,true)
-      }
-       return currentDb(newdb,this.#config)
+       let dbpath = join(this.#litepath,db);  
+        if(!fs.existsSync(dbpath)){
+         return new Db(db,dbpath,this.#litepath,false)
+        }else{ 
+          return new Db(db,dbpath,this.#litepath,true)
+        }  
     }
-    info(){
+    removeDb(db="",cb){
+      if(!db || typeof db !== "string" || db.length ===0 && !cb || typeof cb !== "function"){
+        throw new Error("pouchlite: db and cb required at removeDb,not none string or empty")
+       } 
+      
+       let dbpath = join(this.#litepath,db);
+        if(fs.existsSync(dbpath)){
+           this.#config.remove(db).then(async (res)=>{
+              if(res){
+                   try{
+                     fs.rmSync(dbpath,{recursive:true,force:true})
+                     return cb({
+                      iserror:false,
+                      msg:"success",
+                      code:200,
+                      db
+                     })
+                   }catch(err){
+                          if(err){
+                            return cb({
+                              iserror:true,
+                              msg:"error occured",
+                              code:400,
+                              db:null
+                            })
+                          }
+                   }
+                   return
+              }//
+           
+              
+           })
+        }else{
+          return cb({
+            iserror:true,
+            msg:"not exists",
+            code:404,
+            db:null
+          })
+        }
 
     }
     change(cb){ 
@@ -79,4 +105,4 @@ export default class Pouchlite{
         throw new Error("pouchlite: cb function required")
        }
     }
-}
+} 
