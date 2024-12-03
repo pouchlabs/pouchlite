@@ -11,6 +11,11 @@
     "lint": "eslint .",
     "preview": "rsbuild preview"
   },
+  "files": ["dist"],
+  "exports":{
+    ".":"./dist/es/lite.js"
+  },
+  "main": "./dist/es/lite.js",
   "type": "module",
   "devDependencies": {
     "@biomejs/biome": "^1.8.3",
@@ -24,14 +29,10 @@
   "dependencies": {
     "@msgpack/msgpack": "^3.0.0-beta2",
     "@pouchlab/realtor": "^1.0.1",
-    "adm-zip": "^0.5.14",
-    "axios": "^1.7.2",
     "deepmerge": "^4.3.1",
     "esm-env": "^1.0.0",
     "eventemitter3": "^5.0.1",
-    "get-folder-size": "^4.0.0",
     "localforage": "^1.10.0",
-    "lowdb": "^7.0.1",
     "luxon": "^3.4.4",
     "nanoid": "^5.0.7",
     "queue": "^7.0.0",

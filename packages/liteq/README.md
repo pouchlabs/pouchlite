@@ -46,7 +46,7 @@
  import {Pouchlite} from "@pouchlab/lite-browser";
 ```
   ```js
-    const usersdb = new Pouchlite("users") 
+    const usersdb = Pouchlite("users") 
   console.log(usersdb)
   ```
   [docs](https://pouchlite.top)
@@ -59,13 +59,12 @@
  import {Liteq} from "@pouchlab/liteq";
 ```
   ```js
-  const usersdb = liteq({dpath:"/tmp",dbname:"users"}) //pass valid folder path and db name
+  const usersdb = new Liteq({dpath:"/tmp",dbname:"users"}) //pass valid folder path and db name
   console.log(usersdb)
   ```
   [docs](https://pouchlite.top)
   ### lite-server
-  this sync server is self-hosted
-  check [lite-server](https://liteserver.pouchlabs.xyz)
+coming soon..
 
  # author
  made with love by [ajm](https://devfolio.top/ajm) founder pouchlabs

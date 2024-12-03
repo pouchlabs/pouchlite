@@ -1,29 +1,17 @@
-# Rsbuild Project
-
+# lite browser
+  browser storage engine,store data in collections
 ## Setup
 
 Install the dependencies:
 
 ```bash
-pnpm install
+npm install @pouchlab/lite-browser
 ```
-
-## Get Started
-
-Start the dev server:
-
-```bash
-pnpm dev
+```js
+ import {Pouchlite} from "@pouchlab/lite-browser";
 ```
-
-Build the app for production:
-
-```bash
-pnpm build
-```
-
-Preview the production build locally:
-
-```bash
-pnpm preview
-```
+  ```js
+    const usersdb = Pouchlite("users") 
+  console.log(usersdb)
+  ```
+  [docs](https://pouchlite.top)

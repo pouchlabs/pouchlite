@@ -320,9 +320,6 @@ function create_Collection_use(cname,config,dbname){
       
       })
     },
-    sync:()=>{
-
-    }
 
   };
   
