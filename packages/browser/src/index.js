@@ -1,12 +1,11 @@
 import './index.css';
-import { Pouchlite } from "./lib/lite.js";
+import { Pouchlite } from './lib/lite.js';
 
-let users = Pouchlite("userstestklghkb");
-let messages = users.use("messages");
+const users = Pouchlite('userstestklghkb');
+const messages = users.use('messages');
 
-messages.change()
-console.log(users)
-
+messages.change();
+console.log(users);
 
 document.querySelector('#root').innerHTML = `
 <div class="content">
@@ -16,7 +15,5 @@ document.querySelector('#root').innerHTML = `
 </div>
 `;
 
-let btn = document.querySelector('button');
-btn.onclick=async ()=>{
- 
-}
+const btn = document.querySelector('button');
+btn.onclick = async () => {};

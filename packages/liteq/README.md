@@ -67,7 +67,7 @@
 coming soon..
 
  # author
- made with love by [ajm](https://devfolio.top/ajm) founder pouchlabs
+ made with love by [ajm](https://x.com/ajm_ke) founder pouchlabs
 
 # support 
  support the author if you realy value my work.

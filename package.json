@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pouchlabs/lite.git"
+    "url": "git+https://github.com/pouchlabs/pouchlite.git"
   },
   "keywords": [
     "db",
@@ -32,9 +32,9 @@
   "author": "pouchlabs",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/pouchlabs/lite/issues"
+    "url": "https://github.com/pouchlabs/pouchlite/issues"
   },
-  "homepage": "https://lite.pouchlabs.xyz",
+  "homepage": "https://pouchlite.top",
   "dependencies": {
     "@msgpack/msgpack": "^3.0.0-beta2",
     "adm-zip": "^0.5.14",

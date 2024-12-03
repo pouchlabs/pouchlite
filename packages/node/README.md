@@ -1,58 +1,81 @@
-# create-svelte
+![logo](https://fasteejs.top/icon.png)
+# pouchlite
+# Next Gen Blazingly fast js storage engine
 
-Everything you need to build a Svelte library, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+  pouchlite is a document and files storage engine
+   # who can use 
+  any one creating offline first apps or realtime app
 
-Read more about creating a library [in the docs](https://kit.svelte.dev/docs/packaging).
+  ## Features 
+  we provide both browser,node and sync server
 
-## Creating a project
+  * offline first - easy to implement offline first capabilities
+  * fast -blazing fast writes and reads
+  * built -in orm -interact with your data like boss 🔥
+  * reduced file size - small db size from ground up
+  * encryption - securely store documents
+  * sync - sync data accross pouchlite instances
+  * ttl -  expire documents
+  * collections -store documents in collections
 
-If you're seeing this, you've probably already done this step. Congrats!
+# packages included
+ * lite-node - backend storage engine
+ * lite-browser -browser storage engine
+ * liteq -small mighty single db engine
+ * lite-server - self-hosted sync server
 
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
+# install
+  ### lite-node
+  provided as `@pouchlab/lite-node`
+  ```bash
+   npm i --save @pouchlab/lite-node
+  ```
+  ```js
+   import {Pouchlite} from "@pouchlab/lite-node";
+    const lite = new Pouchlite({path:"./"}) 
+  //provide valid path to file or leave blank for default
+  console.log(lite)
+  ```
+  [docs](https://pouchlite.top)
+ ### lite-browser
+  provided as `@pouchlab/lite-browser`
+  ```bash
+   npm i --save @pouchlab/lite-browser
+  ```
+```js
+ import {Pouchlite} from "@pouchlab/lite-browser";
 ```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+  ```js
+    const usersdb = Pouchlite("users") 
+  console.log(usersdb)
+  ```
+  [docs](https://pouchlite.top)
+ ### liteq
+  provided as `@pouchlab/liteq`
+  ```bash
+   npm i --save @pouchlab/liteq
+  ```
+```js
+ import {Liteq} from "@pouchlab/liteq";
 ```
+  ```js
+const usersdb = new Liteq({dpath:"/tmp",dbname:"users"}) //pass valid folder path and db name
+  console.log(usersdb)
+  ```
+  [docs](https://pouchlite.top)
+  ### lite-server
+  coming soon...
+  self hosted server that syncs
+ # author
+  antony m [@ajm_ke](https://x.com/ajm_ke) founder and core maintainer pouchlabs
 
-Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
+# support 
+ support the author if you realy value my work.
+ you can give star
+ or by giving financial support that would realy motivate me to maintain pouchlite and to keep
+ creating awesome stuff for fellow devs.
 
-## Building
 
-To build your library:
+ [![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Y8Y7XD9EK)
 
-```bash
-npm run package
-```
 
-To create a production version of your showcase app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
-
-## Publishing
-
-Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
-
-To publish your library to [npm](https://www.npmjs.com):
-
-```bash
-npm publish
-```

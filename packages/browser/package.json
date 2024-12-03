@@ -1,6 +1,6 @@
 {
   "name": "@pouchlab/lite-browser",
-  "private": true,
+  "private": false,
   "version": "1.0.0",
   "scripts": {
     "build": "rsbuild build",
@@ -12,8 +12,8 @@
     "preview": "rsbuild preview"
   },
   "files": ["dist"],
-  "exports":{
-    ".":"./dist/es/lite.js"
+  "exports": {
+    ".": "./dist/es/lite.js"
   },
   "main": "./dist/es/lite.js",
   "type": "module",
@@ -37,5 +37,29 @@
     "nanoid": "^5.0.7",
     "queue": "^7.0.0",
     "zod": "^3.23.8"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pouchlabs/pouchlite.git"
+  },
+  "keywords": [
+    "db",
+    "storage",
+    "offline-first",
+    "browser",
+    "nodejs",
+    "sync",
+    "orm",
+    "json",
+    "files",
+    "database",
+    "nosql",
+    "embeddable"
+  ],
+  "author": "pouchlabs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pouchlabs/pouchlite/issues"
+  },
+  "homepage": "https://pouchlite.top"
 }

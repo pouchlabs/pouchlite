@@ -60,5 +60,29 @@
 		"msgpack-lite": "^0.1.26",
 		"nanoid": "^5.0.7",
 		"zod": "^3.23.8"
-	}
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/pouchlabs/pouchlite.git"
+	  },
+	  "keywords": [
+		"db",
+		"storage",
+		"offline-first",
+		"browser",
+		"nodejs",
+		"sync",
+		"orm",
+		"json",
+		"files",
+		"database",
+		"nosql",
+		"embeddable"
+	  ],
+	  "author": "pouchlabs",
+	  "license": "MIT",
+	  "bugs": {
+		"url": "https://github.com/pouchlabs/pouchlite/issues"
+	  },
+	  "homepage": "https://pouchlite.top"
 }

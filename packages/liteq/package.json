@@ -4,10 +4,10 @@
 	"description": "liteq is a key value document single database engine for js",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/pouchlabs/lite.git"
+		"url": "git+https://github.com/pouchlabs/pouchlite.git"
 	},
 	"bugs": {
-		"url": "https://github.com/pouchlabs/lite/issues"
+		"url": "https://github.com/pouchlabs/pouchlite/issues"
 	},
 	"author": {
 		"name": "pouchlabs"

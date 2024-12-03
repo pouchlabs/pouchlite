@@ -1,3 +1,1 @@
-export function col_change(id,data,colEmmiter,current){
-
-}
+export function col_change(id, data, colEmmiter, current) {}
