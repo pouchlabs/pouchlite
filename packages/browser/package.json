@@ -1,7 +1,7 @@
 {
   "name": "@pouchlab/lite-browser",
   "private": false,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "scripts": {
     "build": "rsbuild build",
     "build:lib": "modern build",
