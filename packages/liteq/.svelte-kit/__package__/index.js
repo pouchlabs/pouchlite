@@ -143,13 +143,13 @@ export class Liteq {
     this.helpers={
       encrypt:(text)=>{
         if(!text || typeof text !== "string" || text.length === 0){
-          throw new Error("liteq: key must be string and not empty")
+          throw new Error("liteq: text must be string and not empty")
         }
         return String(encrypt(text,this.#k).full)
       },
       decrypt:(text)=>{
         if(!text || typeof text !== "string" || text.length === 0){
-          throw new Error("liteq: key must be string and not empty")
+          throw new Error("liteq: text must be encrypted string and not empty")
         }
         let iv = text.slice(0,32)
         let hash = text.slice(32);
@@ -355,3 +355,8 @@ setTimeout(()=>{
      }
   } 
 }
+
+const usersdb = new Liteq({dpath:"/tmp",dbname:"users"})
+
+console.log(await usersdb.get("hu"))
+console.log(await usersdb.helpers.genUuid)

@@ -28,6 +28,7 @@
 declare module '$env/static/private' {
 	export const ACLOCAL_PATH: string;
 	export const ALLUSERSPROFILE: string;
+	export const ANDROID_HOME: string;
 	export const APPDATA: string;
 	export const ChocolateyInstall: string;
 	export const ChocolateyLastPathUpdate: string;
@@ -52,6 +53,7 @@ declare module '$env/static/private' {
 	export const HOSTNAME: string;
 	export const INFOPATH: string;
 	export const INIT_CWD: string;
+	export const JAVA_HOME: string;
 	export const LANG: string;
 	export const LOCALAPPDATA: string;
 	export const LOGONSERVER: string;
@@ -64,10 +66,12 @@ declare module '$env/static/private' {
 	export const MSYSTEM_CARCH: string;
 	export const MSYSTEM_CHOST: string;
 	export const MSYSTEM_PREFIX: string;
+	export const NDK_HOME: string;
 	export const NODE: string;
 	export const NODE_EXE: string;
 	export const NPM_CLI_JS: string;
 	export const npm_command: string;
+	export const npm_config_access: string;
 	export const npm_config_cache: string;
 	export const npm_config_globalconfig: string;
 	export const npm_config_global_prefix: string;
@@ -172,6 +176,7 @@ declare module '$env/dynamic/private' {
 	export const env: {
 		ACLOCAL_PATH: string;
 		ALLUSERSPROFILE: string;
+		ANDROID_HOME: string;
 		APPDATA: string;
 		ChocolateyInstall: string;
 		ChocolateyLastPathUpdate: string;
@@ -196,6 +201,7 @@ declare module '$env/dynamic/private' {
 		HOSTNAME: string;
 		INFOPATH: string;
 		INIT_CWD: string;
+		JAVA_HOME: string;
 		LANG: string;
 		LOCALAPPDATA: string;
 		LOGONSERVER: string;
@@ -208,10 +214,12 @@ declare module '$env/dynamic/private' {
 		MSYSTEM_CARCH: string;
 		MSYSTEM_CHOST: string;
 		MSYSTEM_PREFIX: string;
+		NDK_HOME: string;
 		NODE: string;
 		NODE_EXE: string;
 		NPM_CLI_JS: string;
 		npm_command: string;
+		npm_config_access: string;
 		npm_config_cache: string;
 		npm_config_globalconfig: string;
 		npm_config_global_prefix: string;
