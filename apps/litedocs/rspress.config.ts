@@ -13,7 +13,7 @@ export default defineConfig({
   themeConfig: {
     
     socialLinks: [
-      { icon: 'github', mode: 'link', content: 'https://github.com/pouchlabs/lite' },
+      { icon: 'github', mode: 'link', content: 'https://github.com/pouchlabs/pouchlite' },
       { icon: 'x', mode: 'link', content: 'https://x.com/pouchlab' }
     ],
     outlineTitle: 'Outline',
@@ -26,7 +26,7 @@ export default defineConfig({
   },
   plugins: [
     ga({
-      id: 'UA-123456789',
+      id: 'G-9K0PVTPPE4',
     }),
   ], 
 });
