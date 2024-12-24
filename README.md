@@ -3,6 +3,8 @@
 # Next Gen Blazingly fast js storage engine
 
   pouchlite is a document and files storage engine
+  # news 
+    pouchlite is in early stage development,will be considered stable untill 2.0.0,
    # who can use 
   any one creating offline first apps or realtime app
 

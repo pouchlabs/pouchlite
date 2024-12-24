@@ -513,14 +513,14 @@ try {
 your current setup:
   (browser) ${currentScriptHost} <--[HTTP]--> ${serverHost} (server)
   (browser) ${socketHost} <--[WebSocket (failing)]--> ${directSocketHost} (server)
-Check out your Vite / network configuration and https://vitejs.dev/config/server-options.html#server-hmr .`
+Check out your Vite / network configuration and https://vite.dev/config/server-options.html#server-hmr .`
         );
       });
       socket.addEventListener(
         "open",
         () => {
           console.info(
-            "[vite] Direct websocket connection fallback. Check out https://vitejs.dev/config/server-options.html#server-hmr to remove the previous connection error."
+            "[vite] Direct websocket connection fallback. Check out https://vite.dev/config/server-options.html#server-hmr to remove the previous connection error."
           );
         },
         { once: true }
@@ -561,7 +561,7 @@ function setupWebSocket(protocol, hostAndPath, onCloseWithoutOpen) {
   return socket2;
 }
 function cleanUrl(pathname) {
-  const url = new URL(pathname, "http://vitejs.dev");
+  const url = new URL(pathname, "http://vite.dev");
   url.searchParams.delete("direct");
   return url.pathname + url.search;
 }
@@ -818,7 +818,7 @@ function injectQuery(url, queryToInject) {
     return url;
   }
   const pathname = url.replace(/[?#].*$/, "");
-  const { search, hash } = new URL(url, "http://vitejs.dev");
+  const { search, hash } = new URL(url, "http://vite.dev");
   return `${pathname}?${queryToInject}${search ? `&` + search.slice(1) : ""}${hash || ""}`;
 }
 

@@ -1,6 +1,6 @@
 {
 	"name": "@pouchlab/liteq",
-	"version": "1.0.1",
+	"version": "1.1.0",
 	"description": "liteq is a key value document single database engine for js",
 	"repository": {
 		"type": "git",
@@ -30,7 +30,7 @@
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
-		"dev:server": "node --watch ./src/lib"
+		"dev:server": "node --watch ./src/lib/demo.js"
 	},
 	"exports": {
 		".": {
@@ -41,7 +41,8 @@
 	"files": [
 		"dist",
 		"!dist/**/*.test.*",
-		"!dist/**/*.spec.*"
+		"!dist/**/*.spec.*",
+		"!dist/lib/demo.js"
 	],
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
@@ -76,6 +77,8 @@
 		"adm-zip": "^0.5.16",
 		"deepmerge": "^4.3.1",
 		"eventemitter3": "^5.0.1",
+		"jimp": "^1.6.0",
+		"lodash": "^4.17.21",
 		"msgpack-lite": "^0.1.26",
 		"nanoid": "^5.0.7"
 	},
@@ -93,6 +96,7 @@
 		"compressed",
 		"storage",
 		"cache",
-		"ttl"
+		"ttl",
+		"redis"
 	]
 }

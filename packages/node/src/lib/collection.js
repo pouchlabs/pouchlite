@@ -4,6 +4,8 @@ import { Liteq } from "@pouchlab/liteq";
 import Event from "eventemitter3";
 import deepmerge from "deepmerge";
 import fs from "fs"
+import { getImage,putImage } from "./attachments.js";
+
 const Emmitter = new Event();
 
 function verifySchema(schema,data){
@@ -39,6 +41,7 @@ class Collection{
        this.#dbconf=db;
        this.#db = new Liteq({dpath:this.#meta.path,dbname:this.#meta.name})
        this.helpers=this.#db.helpers
+       console.log(this.#config)
     }
     get meta(){
         return this.#meta = deepmerge(this.#meta,{docs:this.#config.getKeys().keys,count:
@@ -231,6 +234,19 @@ class Collection{
        } 
        this.#schema = schema
     }
+    //attachments
+    attachments={
+      image:{
+         get:async ()=>{
+           //gets images
+           getImage()
+         },
+         put:async (image)=>{
+          //puts images
+         }
+
+      }
+    } 
   
     //todo:indexing
     // index={

@@ -4,7 +4,8 @@
   "description": "blazingly fast pure js storage engine",
   "workspaces": [
     "packages/*",
-     "apps/*"
+     "apps/*",
+     "examples/*"
   ],
   "scripts": {
     "build": "npm run build:package-a && npm run build:package-b",
