@@ -1,4 +1,4 @@
-![logo](https://fasteejs.top/icon.png)
+![logo](https://pouchlite.top/logo.png)
 # pouchlite
 # Next Gen Blazingly fast js storage engine
 

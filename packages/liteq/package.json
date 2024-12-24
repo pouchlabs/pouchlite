@@ -78,7 +78,6 @@
 		"deepmerge": "^4.3.1",
 		"eventemitter3": "^5.0.1",
 		"jimp": "^1.6.0",
-		"lodash": "^4.17.21",
 		"msgpack-lite": "^0.1.26",
 		"nanoid": "^5.0.7"
 	},

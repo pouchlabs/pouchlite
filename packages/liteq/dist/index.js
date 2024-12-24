@@ -6,30 +6,11 @@ import { join ,parse} from 'path';
 import {encrypt,decrypt} from './service-enc.js';
 import { encode,decode } from "msgpack-lite";
 import {nanoid} from "nanoid";
-
+import {getImage,putImage,removeImage,getAllImages} from "./storage.js";
+import { checktype,bytesForHuman,loopMerged} from "./utils.js";
 const Emmiter = new Event();
-var checktype = (function(global) {
-  var cache = {}; 
-  return function(obj) {
-      var key;
-      return obj === null ? 'null' // null
-          : obj === global ? 'global' // window in browser or global in nodejs
-          : (key = typeof obj) !== 'object' ? key // basic: string, boolean, number, undefined, function
-          : obj.nodeType ? 'object' // DOM element
-          : cache[key = ({}).toString.call(obj)] // cached. date, regexp, error, object, array, math
-          || (cache[key] = key.slice(8, -1).toLowerCase()); // get XXXX from [object XXXX], and cache it
-  };
-}(this));
 
 
-function bytesForHuman(bytes, decimals = 2) {
-  let units = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB','EB', 'ZB', 'YB']
-  let i = 0
-  for (i; bytes > 1024; i++) {
-      bytes /= 1024;
-  }
-  return parseFloat(bytes.toFixed(decimals)) + ' ' + units[i]
-}
 
 function verify(dpath,dbname){
   if(dpath === undefined || typeof dpath !== "string" || dpath.length === 0){
@@ -53,6 +34,7 @@ function verify(dpath,dbname){
 
 //listeners
 //writer
+
 Emmiter.on("write",async(data)=>{
 try {
   let fulldpath = join(data.dbpath,data.db+".liteq")
@@ -67,21 +49,21 @@ try {
    let config = decode(zip.getEntry("config.lite").getData())
    let found = config.find((c)=>c.key === data.key);
    let filtered = config.filter(c=>c.key !== data.key);
-  
   if(found){
    //found just update
-   let file_to_update = decode(zip.getEntry(data.key+".msp").getData())
-    zip.updateFile(data.key+".msp",encode(deepmerge(file_to_update,data.data)))
-    //conf
+   let file_to_update = decode(zip.getEntry(data.key+".msp").getData());
+   let merged = deepmerge(file_to_update,data.data);
+    zip.updateFile(data.key+".msp",encode(loopMerged(merged)))
+    //config update
     filtered.push(deepmerge(found,{ttl:data.ttl,updated_at:Date.now()}))
     zip.getEntry("config.lite").setData(encode(filtered))
-    //zip.writeZip()
-    Emmiter.emit("change",{key:data.key,data:data.data,ttl:data.ttl})
-    Emmiter.emit("change_"+data.key,{key:data.key,data:data.data,ttl:data.ttl})
+    //write
+    let updated = decode(zip.getEntry(data.key+".msp").getData());
+    Emmiter.emit("change",{key:data.key,data:updated,ttl:data.ttl})
+    Emmiter.emit("change_"+data.key,{key:data.key,data:updated,ttl:data.ttl})
     zip.writeZip(fulldpath)
   }else{ 
     //save new
-    
      config.push({key:data.key,ttl:data.ttl,created_at:Date.now(),updated_at:Date.now()})
      zip.updateFile("config.lite",encode(config))
      zip.addFile(data.key+".msp",encode(data.data)) 
@@ -130,6 +112,7 @@ export class Liteq {
   #init
   #k
   #useTtl
+  #zip
   constructor(opts={dpath:"",dbname:""}) {
     if(!opts || checktype(opts) !== checktype({})){
       throw new Error("liteq: valid object params required")
@@ -172,12 +155,15 @@ export class Liteq {
         fs.stat(this.#dbname,(err)=>{
           if(err){
             const zip = new AdmZip();
+            //add config file
            zip.addFile("config.lite",encode([])) 
            zip.writeZip(this.#dbname)
           } 
+         
         })
     }  
     this.#init()
+    
     this.#useTtl=()=>{
       let i = setInterval(async ()=>{
         clearInterval(i)
@@ -193,6 +179,7 @@ export class Liteq {
       },200)
     }
     this.#useTtl()
+  
   }   
   set(key,obj,ttl) {
     
@@ -208,6 +195,7 @@ export class Liteq {
   let time = ttl || null;
 
  let st =setTimeout(()=>{
+
   Emmiter.emit("write",{db:this.dbname,dbpath:this.#dbpath,key,ttl:time,data:obj})
 
   clearTimeout(st)
@@ -249,8 +237,6 @@ setTimeout(()=>{
   }else{
     Emmiter.emit("found_get_"+key,null)
   } 
-  
-
  },7)
  return new Promise((resolve)=>{
   Emmiter.once("found_get_"+key,(data)=>{
@@ -354,9 +340,130 @@ setTimeout(()=>{
       })
      }
   } 
+  //attachments
+  attachments={
+    image: {
+     get:async (opts={docid:"",id:""})=>{
+        if(!opts || checktype(opts) !== checktype({})  || !opts.docid || typeof opts.docid !== "string" || opts.docid.length === 0 || !opts.id || typeof opts.id !== "string" || opts.id.length === 0)
+        {
+          return{
+            iserror:true,
+            msg:"valid options required",
+            image:null,
+            error:null
+          }
+        }
+        //
+        const zip = new AdmZip(this.#dbname);
+   
+              //find doc by id
+              let config = decode(zip.getEntry("config.lite").getData())
+             
+              let found = config.find((c)=>c.key === opts.docid)
+              if(!found){
+                return {
+                  iserror:true,
+                  msg:"document not found",
+                  image:null,
+                  error:null
+                }
+              }
+              //found 
+            return await getImage(opts.docid,opts.id,zip,this)
+
+        },
+    getAll:async (id)=>{
+      if(id && typeof id === "string" && id.length > 0){
+        const zip = new AdmZip(this.#dbname);
+        
+        //find doc by id
+        let config = decode(zip.getEntry("config.lite").getData())
+       
+        let found = config.find((c)=>c.key === id)
+        if(!found){
+          return {
+            iserror:true,
+            msg:"document not found",
+            image:null,
+            error:null
+          }
+        }
+        //found 
+        //put
+
+       return await getAllImages(found.key,zip,this)
+     
+      }else{
+        return{
+          iserror:true,
+          msg:"document id required",
+          image:null,
+          error:null
+        }
+      }
+    },
+    put:async (id="",image="")=>{
+            if(id && typeof id === "string" && id.length > 0 && image && image.length !== 0 && typeof image !== "number"){
+              const zip = new AdmZip(this.#dbname);
+              
+              //find doc by id
+              let config = decode(zip.getEntry("config.lite").getData())
+             
+              let found = config.find((c)=>c.key === id)
+              if(!found){
+                return {
+                  iserror:true,
+                  msg:"document not found",
+                  image:null,
+                  error:null
+                }
+              }
+              //found 
+              //put
+             return await putImage(found.key,zip,image,this)
+           
+            }else{
+              return{
+                iserror:true,
+                msg:"document id and image url or blob required",
+                image:null,
+                error:null
+              }
+            }
+        },
+        remove:async (opts={docid:"",id:""})=>{
+          if(!opts || checktype(opts) !== checktype({})  || !opts.docid || typeof opts.docid !== "string" || opts.docid.length === 0 || !opts.id || typeof opts.id !== "string" || opts.id.length === 0)
+          {
+            return{
+              iserror:true,
+              msg:"valid options required",
+              image:null,
+              error:null
+            }
+          }
+          //
+          const zip = new AdmZip(this.#dbname);
+     
+                //find doc by id
+                let config = decode(zip.getEntry("config.lite").getData())
+               
+                let found = config.find((c)=>c.key === opts.docid)
+                if(!found){
+                  return {
+                    iserror:true,
+                    msg:"document not found",
+                    image:null,
+                    error:null
+                  }
+                }
+                //found 
+              return await removeImage(opts.docid,opts.id,zip,this)
+  
+          }
+      
+  }
 }
 
-const usersdb = new Liteq({dpath:"/tmp",dbname:"users"})
+}
 
-console.log(await usersdb.get("hu"))
-console.log(await usersdb.helpers.genUuid)
+ 

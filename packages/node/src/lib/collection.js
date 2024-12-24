@@ -40,8 +40,7 @@ class Collection{
        this.#indexes = [];
        this.#dbconf=db;
        this.#db = new Liteq({dpath:this.#meta.path,dbname:this.#meta.name})
-       this.helpers=this.#db.helpers
-       console.log(this.#config)
+       this.helpers=this.#db.helpers 
     }
     get meta(){
         return this.#meta = deepmerge(this.#meta,{docs:this.#config.getKeys().keys,count:
@@ -235,18 +234,9 @@ class Collection{
        this.#schema = schema
     }
     //attachments
-    attachments={
-      image:{
-         get:async ()=>{
-           //gets images
-           getImage()
-         },
-         put:async (image)=>{
-          //puts images
-         }
-
-      }
-    } 
+    get attachments(){
+      return new Liteq({dpath:this.#meta.path,dbname:this.#meta.name}).attachments
+    }
   
     //todo:indexing
     // index={

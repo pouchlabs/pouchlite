@@ -14,7 +14,7 @@
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
 		"test:unit": "vitest",
-		"dev:server": "node --watch src/lib"
+		"dev:server": "node --watch src/lib/demo.js"
 	},
 	"exports": {
 		".": {
@@ -25,7 +25,8 @@
 	"files": [
 		"dist",
 		"!dist/**/*.test.*",
-		"!dist/**/*.spec.*"
+		"!dist/**/*.spec.*",
+		"!dist/lib/demo.js"
 	],
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
@@ -51,13 +52,12 @@
 	"types": "./dist/index.d.ts",
 	"type": "module",
 	"dependencies": {
-		"@pouchlab/liteq": "^1.0.0",
+		"@pouchlab/liteq": "^1.1.0",
 		"@pouchlab/realtor": "^2.0.2",
 		"adm-zip": "^0.5.16",
 		"deepmerge": "^4.3.1",
 		"eventemitter3": "^5.0.1",
 		"jimp": "^1.6.0",
-		"lowdb": "^7.0.1",
 		"msgpack-lite": "^0.1.26",
 		"nanoid": "^5.0.7",
 		"zod": "^3.23.8"
