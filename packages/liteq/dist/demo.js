@@ -1,21 +1,23 @@
 import { Liteq } from "./index.js"
 const usersdb = new Liteq({dpath:"/tmp",dbname:"users"})
+let fn = ()=>{
 
+}
 
 let t = await usersdb.set("test",{_id:"anto",users:[
-    { id: 1, name: 'antomym' },
-    { id: 'antony', age: 30, num: 60 },
+    { id: 1, name: 'antombm' },
+    { id: 2, age: 30, num: 60 },
+    { id: 1, name: 'anto',age:50 },
     { id: 'm', name: 'antony' },
-    { id: 'antony', age: 30, num: 60 },
+    { id: 3, age: 30, num: ["hi","hi",{id:"hv"}],f:fn },
   ]}) 
 
 
 
- let img = await usersdb.attachments.image.getAll("test") 
-//let imgp= await usersdb.attachments.image.put("test","https://pouchlite.top/logo.png")
-console.log(img) 
 
+
+
+//doc.set("users",{users:[{id:1,name:"anto"}]})
 let doc = await usersdb.get("test")
-//doc.set("users",{id:"map"})
-console.log(doc) 
+doc.users.forEach(u=>console.log(u.num))
 
