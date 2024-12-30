@@ -4,7 +4,9 @@ import { Pouchlite } from './lib/lite.js';
 const users = Pouchlite('userstestklghkb');
 const messages = users.use('messages');
 
-messages.change();
+messages.change(c=>{
+  console.log(c,"change")
+});
 console.log(users);
 
 document.querySelector('#root').innerHTML = `
@@ -16,4 +18,8 @@ document.querySelector('#root').innerHTML = `
 `;
 
 const btn = document.querySelector('button');
-btn.onclick = async () => {};
+btn.onclick = async () => {
+const btn = document.querySelector('button');
+
+};
+//todo attachments

@@ -1,7 +1,7 @@
 {
   "name": "lite",
-  "version": "1.0.0",
-  "description": "blazingly fast pure js storage engine",
+  "version": "1.1.0",
+  "description": " Next Gen Blazingly fast js storage engine",
   "workspaces": [
     "packages/*",
      "apps/*",
@@ -28,7 +28,10 @@
     "files",
     "database",
     "nosql",
-    "embeddable"
+    "embeddable",
+    "pouchdb",
+    "couchdb",
+    "ttl"
   ],
   "author": "pouchlabs",
   "license": "MIT",

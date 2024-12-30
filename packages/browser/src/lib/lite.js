@@ -7,7 +7,7 @@ import { get_many, get_single } from './get.js';
 import { put_single, update_single } from './put.js';
 import { remove_many, remove_single } from './remove.js';
 import { checktype } from './utils.js';
-
+import {Jimp} from "jimp";
 function create_Collection_use(cname, config, dbname) {
   //
   const colEmitter = new EventEmitter();
@@ -17,7 +17,195 @@ function create_Collection_use(cname, config, dbname) {
     storeName: `${cname}_pouchlite`,
   });
   const found = config.data.cols.find((c) => c.name === cname);
+
   const current = {
+    //attachments
+    attachments:{
+      image:{
+        get:async (opts={docid:"",id:""})=>{
+          if(!opts || checktype(opts) !== checktype({})  || !opts.docid || typeof opts.docid !== "string" || opts.docid.length === 0 || !opts.id || typeof opts.id !== "string" || opts.id.length === 0)
+            {
+              return{
+                iserror:true,
+                msg:"valid options required",
+                image:null,
+                error:null
+              }
+            }//
+            let foundoc = await current.get(opts.docid); 
+            
+             if(foundoc.iserror){
+              //null
+              return foundoc
+             }
+             //found
+             let attachments = foundoc.doc._attachments || [];
+             let filtered = attachments.find(at=>at.id === opts.id);
+
+             if(!filtered){
+              return{
+                iserror:true,
+                msg:"image not found",
+                doc:opts.docid,
+                image:null,
+                error:null
+              }
+             }
+             //
+             try {
+              let img = await Jimp.read(filtered.data);
+              return{
+                iserror:false,
+                msg:"success",
+                image:{
+                  id:filtered.id,
+                  data:img
+                },
+                error:null
+              }
+             } catch (error) {
+              return{
+                iserror:true,
+                msg:"error occured",
+                image:null,
+                error:error
+              }
+           
+             }
+        },
+        getAll:async (opts={docid:"",ids:[]})=>{
+          if(!opts || checktype(opts) !== checktype({})  || !opts.docid || typeof opts.docid !== "string" || opts.docid.length === 0 || !opts.ids ||  checktype(opts.ids) !== checktype([]) || opts.ids.length === 0)
+            {
+              return{
+                iserror:true,
+                msg:"valid options required",
+                image:null,
+                error:null
+              }
+            }//
+            let foundoc = await current.get(opts.docid); 
+            
+             if(foundoc.iserror){
+              //null
+              return foundoc
+             }
+             //found
+             //loop
+             let images = [];
+             for(let id of opts.ids){
+              if(!id.id){
+               let valid=await current.attachments.image.get({docid:opts.docid,id:id})
+               if(valid.iserror){
+                 
+                return images
+               }else{
+                images.push(valid)
+                return images
+               }
+              }
+              
+             }
+
+        },
+        remove: async (opts={docid:"",id:""})=>{
+          if(!opts || checktype(opts) !== checktype({})  || !opts.docid || typeof opts.docid !== "string" || opts.docid.length === 0 || !opts.id || typeof opts.id !== "string" || opts.id.length === 0)
+            {
+              return{
+                iserror:true,
+                msg:"valid options required",
+                image:null,
+                error:null
+              }
+            }//
+            let foundoc = await current.get(opts.docid); 
+            
+             if(foundoc.iserror){
+              //null
+              return foundoc
+             }
+             //found
+             let attachments = foundoc.doc._attachments || [];
+             let valid = attachments.find(f=>f.id === opts.id);
+             if(!valid){
+              return{
+                iserror:true,
+                msg:"image not found",
+                doc:opts.docid,
+                image:null,
+                error:null
+              }
+             }
+             let toupdate = foundoc.doc;
+              toupdate._attachments = attachments.filter(at=>at.id !== opts.id);
+          
+             
+             await current.put({id:opts.docid,data:toupdate})
+             return{
+              iserror:false,
+              msg:"success",
+              image:{
+                id:opts.id,
+                data:null
+              },
+              error:null
+            }
+
+        },
+        put:async (image="",docid="")=>{
+          if(!image || image.length === 0  || checktype(image)  === checktype({}) ||  typeof image === "number" && !docid || checktype(docid)  !== checktype("")|| docid.length === 0  || checktype(docid)  === checktype({}) )
+            {
+              return{
+                iserror:true,
+                msg:"valid image buffer,url or blob required && docid",
+                image:null,
+                error:null
+              }
+            }//
+            let foundoc = await current.get(docid); 
+            
+             if(foundoc.iserror){
+              //null
+              return foundoc
+             }
+             //found
+             let attachments = foundoc.doc._attachments || [];
+             try {
+              let img = await Jimp.read(image);
+              let newimg ={
+               id:nanoid(16),
+               type:'image',
+               mime:img.mime,
+               data:await img.getBase64(img.mime)
+               
+              }
+              attachments.push(newimg)
+              await current.update({id:docid,data:{_attachments:attachments}})
+              
+              return{
+                iserror:false,
+                msg:"success",
+                image:{
+                  id:newimg.id,
+                  data:img
+                },
+                error:null
+              }
+             } catch (error) {
+              return{
+                iserror:true,
+                msg:"error occured",
+                image:null,
+                error:error
+              }
+           
+             }
+           
+        }
+      },
+    },
+    info:()=>{
+      return found
+    },
     put: async (opts) => {
       return new Promise((resolve, reject) => {
         if (opts && checktype(opts) === checktype({})) {
@@ -68,12 +256,14 @@ function create_Collection_use(cname, config, dbname) {
         }
         get_single(id, current, local).then((doc) => {
           if (doc) {
+    
             resolve({
               iserror: false,
               msg: 'success',
               error: null,
               doc,
             });
+         
           }
           reject({
             iserror: true,
@@ -312,7 +502,8 @@ function create_Collection_use(cname, config, dbname) {
         });
       });
     },
-  };
+  }
+
 
   if (!found) {
     //create new
@@ -327,16 +518,19 @@ function create_Collection_use(cname, config, dbname) {
     config.data.cols_nums++;
     //save
     config.write();
-    current.name = newcol.name;
-    current.prefix_name = newcol.prefix_name;
-    current.id = newcol.id;
-    current.db_to = newcol.db_to;
+    // current.name = newcol.name;
+    // current.prefix_name = newcol.prefix_name;
+    // current.id = newcol.id;
+    // current.db_to = newcol.db_to;
+  
+   
     return current;
   }
-  current.name = found.name;
-  current.prefix_name = found.prefix_name;
-  current.id = found.id;
-  current.db_to = found.db_to;
+  // current.name = found.name;
+  // current.prefix_name = found.prefix_name;
+  // current.id = found.id;
+  // current.db_to = found.db_to;
+  
   return current;
 }
 
@@ -378,8 +572,6 @@ function Pouchlite(dbname) {
       //todos tomorrow
     }
     return {
-      name: dbname,
-      prefixed_name: `pouchlite_db_${dbname}`,
       info: () => {
         return {
           name: dbname,
