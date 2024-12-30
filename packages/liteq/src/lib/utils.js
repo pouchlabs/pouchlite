@@ -32,39 +32,39 @@ export var checktype = (function(global) {
           
             map.set(d,arrUniq[i][d])
             if(checktype(map.get(d))=== checktype([])){
-            //   let unique = [];
+              let unique = [];
 
-            //   //objects
-            //   let obarr = [];
-            //   let sarr = [];
-            //   let narr = [];
-            // //loop props
-            //  for(let val of map.get(d)){
-            //    if(checktype(val) === checktype({})){
-            //     obarr.push(val)
-            //    }
-            //    if(checktype(val)=== "string"){
-            //     sarr.push(val)
-            //    }
-            //    if(checktype(val)=== "number"){
-            //     narr.push(val)
-            //    }
-            //  }
-            //       //objects
-            //     for(let f of uniqueDeepArr(obarr)){
-            //       unique.push(f)
-            //      }
-            //      //strings
-            //      for(let f of removeDuplicate(sarr)){
-            //        unique.push(f)
-            //      }
-            //       //numbers
-            //       for(let f of removeDuplicate(narr)){
-            //         unique.push(f)
-            //       } the other way
+              //objects
+              let obarr = [];
+              let sarr = [];
+              let narr = [];
+            //loop props
+             for(let val of map.get(d)){
+               if(checktype(val) === checktype({})){
+                obarr.push(val)
+               }
+               if(checktype(val)=== "string"){
+                sarr.push(val)
+               }
+               if(checktype(val)=== "number"){
+                narr.push(val)
+               }
+             }
+                  //objects
+                for(let f of uniqueDeepArr(obarr)){
+                  unique.push(f)
+                 }
+                 //strings
+                 for(let f of removeDuplicate(sarr)){
+                   unique.push(f)
+                 }
+                  //numbers
+                  for(let f of removeDuplicate(narr)){
+                    unique.push(f)
+                  } //the other way
             
                 //concurent
-              map.set(d,uniqueDeepArr(map.get(d)))
+              map.set(d,unique)
                deeparr.push(Object.fromEntries(map))
             }else{
               deeparr.push(Object.fromEntries(map))
@@ -73,7 +73,7 @@ export var checktype = (function(global) {
        }
      
     
-      return [...new Map(deeparr.slice().map(v => [v.id, v])).values()]//.reverse()
+      return [...new Map(deeparr.slice().map(v => [v.id, v])).values()]
            
 }
 
